@@ -2,9 +2,8 @@
   "name": "rabbitmq_server",
   "version": "0.0.1",
   "private": true,
-
   "dependencies": {
-    "express": "~4.9.0",
-    "amqplib": "~0.2.1"
+    "amqplib": "~0.2.1",
+    "bluebird": "^2.3.2"
   }
 }
