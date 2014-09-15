@@ -1,17 +1,16 @@
-var express = require('express');
-
 /******************************************
  *
  *  App
  *
  ******************************************/
 
-var app = express();
 
 var RabbitMQModel = require('./models/rabbitMQ');
 
-RabbitMQModel.init();
+RabbitMQModel.init().then(function()
+{
+    RabbitMQModel.prepareJobsConsumer();
 
-
+})
 
 
