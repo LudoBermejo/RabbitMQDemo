@@ -1,0 +1,11 @@
+{
+  "name": "rabbitmq_server",
+  "version": "0.0.1",
+  "private": true,
+
+  "dependencies": {
+    "express": "~4.9.0",
+    "amqplib": "~0.2.1",
+    "when": "~3.4.5"
+  }
+}
