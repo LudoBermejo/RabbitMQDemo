@@ -10,7 +10,7 @@ rabbitMQ.init = function()
 {
     return new Promise(function (resolve, reject) {
 
-        amqp.connect('amqp://localhost').then(function (conn) {
+        amqp.connect('amqp://192.168.1.111:5672').then(function (conn) {
             conn.createConfirmChannel().then(function (ch) {
                 channel = ch;
                 resolve();
@@ -32,7 +32,8 @@ rabbitMQ.prepareResultConsumer = function(obj)
 
 rabbitMQ.onResult= function(msg) {
     var body = msg.content.toString();
-    console.log(" [x] Received '%s'", JSON.parse(body));
+
+    console.log(" [x] Received ", JSON.parse(body));
     channel.ack(msg);
 
 }

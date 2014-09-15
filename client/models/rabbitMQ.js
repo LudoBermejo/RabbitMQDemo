@@ -8,7 +8,7 @@ rabbitMQ.init = function()
 {
     return new Promise(function (resolve, reject) {
 
-        amqp.connect('amqp://localhost').then(function (conn) {
+        amqp.connect('amqp://192.168.1.111').then(function (conn) {
             conn.createConfirmChannel().then(function (ch) {
                 channel = ch;
                 resolve();
