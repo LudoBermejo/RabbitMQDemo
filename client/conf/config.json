@@ -5,6 +5,8 @@
         "path": "java"
     },
     "RabbitMQ": {
+        "jobsQueue": "jobs_queue",
+        "resultQueue": "result_queue",
         "test": {
             "host": "amqp://192.168.1.111"
         },

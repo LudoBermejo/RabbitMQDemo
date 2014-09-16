@@ -23,7 +23,7 @@ rabbitMQ.init = function () {
 }
 
 rabbitMQ.prepareJobsConsumer = function (obj) {
-    var q = "jobs_queue";
+    var q = configuration.RabbitMQ.jobsQueue;
     var ok = channel.assertQueue(q, {durable: true});
     ok = ok.then(function () {
         channel.prefetch(1);
@@ -94,13 +94,13 @@ rabbitMQ.onJob = function (msg) {
         mustACK = true;
     }
 
-    setTimeout(rabbitMQ.executeJAR,5000,msg, mustACK)
+    rabbitMQ.executeJAR(msg, mustACK);
 
 
 }
 
 rabbitMQ.sendResult = function (obj) {
-    var q = 'result_queue';
+    var q = configuration.RabbitMQ.resultQueue;
     var ok = channel.assertQueue(q, {durable: true});
 
     var msg = JSON.stringify(obj);
