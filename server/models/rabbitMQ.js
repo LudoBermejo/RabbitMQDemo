@@ -1,7 +1,6 @@
 var amqp = require('amqplib');
 var Promise = require('bluebird');
 
-
 var channel = null;
 var rabbitMQ = {};
 
