@@ -1,0 +1,18 @@
+{
+    "Java": {
+        "totalInstances": 3,
+        "file": "java.jar",
+        "path": "java"
+    },
+    "RabbitMQ": {
+        "test": {
+            "host": "amqp://192.168.1.111"
+        },
+        "development": {
+            "host": "amqp://192.168.1.111"
+        },
+        "production": {
+            "host": "amqp://192.168.1.111"
+        }
+    }
+}
