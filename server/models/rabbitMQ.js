@@ -9,7 +9,7 @@ rabbitMQ.init = function()
 {
     return new Promise(function (resolve, reject) {
 
-        amqp.connect('amqp://nodejs:mynodepassword@192.168.1.111:5672').then(function (conn) {
+        amqp.connect("amqp://nodejs:mynodepassword@54.77.209.64:9999").then(function (conn) {
             conn.createConfirmChannel().then(function (ch) {
                 channel = ch;
                 rabbitMQ.prepareJobsEmmitter

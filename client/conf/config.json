@@ -8,13 +8,13 @@
         "jobsQueue": "jobs_queue_priorized",
         "resultQueue": "result_queue_priorized",
         "test": {
-            "host": "amqp://nodejs:mynodepassword@192.168.1.111:5672"
+            "host": "amqp://nodejs:mynodepassword@54.77.209.64:9999"
         },
         "development": {
-            "host": "amqp://nodejs:mynodepassword@192.168.1.111:5672"
+            "host": "amqp://nodejs:mynodepassword@54.77.209.64:9999"
         },
         "production": {
-            "host": "amqp://nodejs:mynodepassword@192.168.1.111:5672"
+            "host": "amqp://nodejs:mynodepassword@54.77.209.64:9999"
         }
     }
 }
