@@ -16,30 +16,44 @@ rabbitMQ.init = function () {
         amqp.connect(configuration.RabbitMQ[process.env.NODE_ENV].host).then(function (conn) {
             conn.createConfirmChannel().then(function (ch) {
                 channel = ch;
-                resolve();
+
+                var q = configuration.RabbitMQ.jobsQueue;
+                var ok = channel.assertQueue(q, {durable: true, arguments: {"x-max-priority": 10}});
+                ok = ok.then(function () {
+                    channel.prefetch(1);
+                });
+                ok = ok.then(function () {
+                    channel.consume(q, rabbitMQ.onJob, {noAck: false});
+                    console.log(" [*] Jobs queue created");
+
+
+                    var q = configuration.RabbitMQ.resultQueue;
+                    var ok = channel.assertQueue(q, {durable: true, arguments: {"x-max-priority": 10}});
+
+                    ok.then(function () {
+                        console.log(" [*] Result queue created");
+                        resolve();
+                    });
+
+                });
+
             });
         });
     });
 }
 
 rabbitMQ.prepareJobsConsumer = function (obj) {
-    var q = configuration.RabbitMQ.jobsQueue;
-    var ok = channel.assertQueue(q, {durable: true});
-    ok = ok.then(function () {
-        channel.prefetch(1);
-    });
-    ok = ok.then(function () {
-        channel.consume(q, rabbitMQ.onJob, {noAck: false});
-        console.log(" [*] Waiting for messages. To exit press CTRL+C");
-    });
+
 }
 String.prototype.rtrim = function () {
     return this.replace(/\s+$/, "");
 }
 
-rabbitMQ.executeJAR = function(msg, mustACK)
-{
+rabbitMQ.executeJAR = function (msg, mustACK) {
     var body = msg.content.toString();
+
+    var data = JSON.parse(body);
+
     var exec = require('child_process').exec, child;
 
     child = exec('java -jar ' + configuration.Java.file, {
@@ -66,15 +80,14 @@ rabbitMQ.executeJAR = function(msg, mustACK)
                     resp.response = { type: "error", value: "No file returned"};
                 }
                 else {
-                    console.log(file.file)
                     var result = require("../java/" + file.file);
                     resp.response = { type: "complete", value: result};
                 }
 
             }
 
-            if(mustACK) channel.ack(msg);
-            rabbitMQ.sendResult(JSON.stringify(resp));
+            if (mustACK) channel.ack(msg);
+            rabbitMQ.sendResult(JSON.stringify(resp), data.priority||1);
             totalJobsRunning--;
         });
 
@@ -85,12 +98,10 @@ rabbitMQ.onJob = function (msg) {
 
     var mustACK = false;
     totalJobsRunning++;
-    if(totalJobsRunning < configuration.Java.totalInstances)
-    {
+    if (totalJobsRunning < configuration.Java.totalInstances) {
         channel.ack(msg);
     }
-    else
-    {
+    else {
         mustACK = true;
     }
 
@@ -99,20 +110,15 @@ rabbitMQ.onJob = function (msg) {
 
 }
 
-rabbitMQ.sendResult = function (obj) {
+rabbitMQ.sendResult = function (obj,priority) {
+
     var q = configuration.RabbitMQ.resultQueue;
-    var ok = channel.assertQueue(q, {durable: true});
-
     var msg = JSON.stringify(obj);
-    ok.then(function () {
-        channel.sendToQueue(q, new Buffer(msg), {persistent: true}, function (err, ok) {
 
-            if (err !== null)
-                console.warn('Message nacked!');
-            else
-                console.log('Message acked');
+        channel.sendToQueue(q, new Buffer(msg), {persistent: true, priority: priority}, function (err, ok) {
+
         });
-    });
+
 
 }
 

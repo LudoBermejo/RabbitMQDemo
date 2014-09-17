@@ -5,16 +5,16 @@
         "path": "java"
     },
     "RabbitMQ": {
-        "jobsQueue": "jobs_queue",
-        "resultQueue": "result_queue",
+        "jobsQueue": "jobs_queue_priorized",
+        "resultQueue": "result_queue_priorized",
         "test": {
-            "host": "amqp://192.168.1.111"
+            "host": "amqp://nodejs:mynodepassword@192.168.1.111:5672"
         },
         "development": {
-            "host": "amqp://192.168.1.111"
+            "host": "amqp://nodejs:mynodepassword@192.168.1.111:5672"
         },
         "production": {
-            "host": "amqp://192.168.1.111"
+            "host": "amqp://nodejs:mynodepassword@192.168.1.111:5672"
         }
     }
 }
